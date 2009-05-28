@@ -104,10 +104,12 @@ function! StatuslineTabWarning()
 endfunction
 
 "indent settings
-set shiftwidth=4
-set softtabstop=4
+set shiftwidth=2
+set tabstop=2
+set softtabstop=2
 set expandtab
 set autoindent
+set smarttab
 
 "folding settings
 set foldmethod=indent   "fold based on indent
@@ -120,7 +122,7 @@ set wildignore=*.o,*.obj,*~ "stuff to ignore when tab completing
 
 "display tabs and trailing spaces
 set list
-"set listchars=tab:▷⋅,trail:⋅,nbsp:⋅
+set listchars=tab:▷⋅,trail:⋅,nbsp:⋅
 
 set formatoptions-=o "dont continue comments when pushing o/O
 
@@ -149,26 +151,10 @@ set hidden
 "dont load csapprox if we no gui support - silences an annoying warning
 if !has("gui")
     let g:CSApprox_loaded = 1
-else
-    if has("gui_gnome")
-        set term=gnome-256color
-        colorscheme desert
-    else
-        set t_Co=256
-        colorscheme vibrantink
-        set guitablabel=%M%t
-        set lines=40
-        set columns=115
-    endif
-    if has("gui_mac") || has("gui_macvim")
-        set guifont=Monaco:h16
-    endif
-    if has("gui_win32") || has("gui_win32s")
-        set guifont=Consolas:h12
-    endif
-endif
 
-nmap <silent> <Leader>p :NERDTreeToggle<CR>
+
+
+endif
 
 "make <c-l> clear the highlight as well as redraw
 nnoremap <C-L> :nohls<CR><C-L>
@@ -176,9 +162,6 @@ inoremap <C-L> <C-O>:nohls<CR>
 
 "map to bufexplorer
 nnoremap <C-B> :BufExplorer<cr>
-
-"map to fuzzy finder text mate stylez
-nnoremap <c-f> :FuzzyFinderTextMate<CR>
 
 "map Q to something useful
 noremap Q gq
@@ -220,3 +203,52 @@ function! s:HighlightExcessColumns(width)
         echomsg "HighlightExcessColumns: set a &textwidth, or pass one in"
     endif
 endfunction
+
+" theme
+set background=dark
+if has("gui_running")
+  colorscheme ir_black
+  set columns=101 lines=60
+  set transparency=8
+endif
+
+set guifont=PanicSans:h15
+set guioptions=egmrLt
+
+" store backups in .vim-tmp
+set backupdir=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
+set directory=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
+
+" scroll the viewport faster
+nnoremap <C-e> 3<C-e>
+nnoremap <C-y> 3<C-y>
+
+" Catch trailing whitespace ,s
+set listchars=tab:>-,trail:·,eol:$
+nmap <silent> <leader>s :set nolist!<CR>
+
+" ack
+set grepprg=ack
+set grepformat=%f:%l:%m
+
+" Highlight search terms...
+set hlsearch
+set incsearch " ...dynamically as they are typed.
+
+" auto-change directory to current buffer
+autocmd BufEnter * :cd %:p:h
+
+let mapleader = ","
+
+map <leader>cd :cd %:p:h<CR>  " change to current directory 
+map <leader>t :FuzzyFinderTextMate<CR>
+map <Leader>, :NERDTreeToggle<CR>
+" Vim will show the ^M line-endings. A quick search and replace works wonders
+map <Leader>m mz:%s/\r$//g<cr>`z
+
+" Always hide the statusline
+set laststatus=2
+
+" Format the statusline
+set statusline=Line:\ \ %l/%L:%c\ \ \ %F%m%r%h\ %w
+
