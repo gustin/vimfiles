@@ -2,18 +2,8 @@ h1. Usage
 
 In your home directory, run:
 <pre><code>
-git clone git://github.com/scrooloose/vimfiles.git .vim
-ln -s Projects/vimfiles .vim
+git clone git://github.com/gustin/vimfiles.git .vim
+ln -s .vim/vimrc .vimrc
 
 </code></pre>
 
-Put this stuff in your ~/.vimrc
-<pre><code>
-source ~/.vim/vimrc
-
-colorscheme vibrantink
-set nu
-set sts=2
-set sw=2
-let g:fuzzy_ignore = "gems/*"
-</code></pre>
