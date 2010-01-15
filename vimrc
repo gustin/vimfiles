@@ -152,7 +152,7 @@ if has("gui_running")
   set transparency=8
 endif
 
-set guifont=PanicSans:h15
+set guifont=Inconsolata:h18
 set guioptions=egmrLt
 
 " store backups in .vim-tmp
