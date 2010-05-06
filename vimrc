@@ -176,15 +176,21 @@ set hlsearch
 set incsearch " ...dynamically as they are typed.
 
 " auto-change directory to current buffer
-autocmd BufEnter * :cd %:p:h
+" autocmd BufEnter * :cd %:p:h
 
-let mapleader = ","
+let mapleader = ','
 
 map <leader>cd :cd %:p:h<CR>  " change to current directory 
-map <leader>t :FuzzyFinderTextMate<CR>
-map <Leader>, :NERDTreeToggle<CR>
+map <leader>f :FuzzyFinderTextMate<CR>
+map <leader>, :NERDTreeToggle<CR>
 " Vim will show the ^M line-endings. A quick search and replace works wonders
-map <Leader>m mz:%s/\r$//g<cr>`z
+map <leader>m mz:%s/\r$//g<cr>`z
+
+map <leader>ew :e <C-R>=expand("%:p:h") . "/" <CR>
+map <leader>es :sp <C-R>=expand("%:p:h") . "/" <CR>
+map <leader>ev :vsp <C-R>=expand("%:p:h") . "/" <CR>
+map <leader>et :tabe <C-R>=expand("%:p:h") . "/" <CR>
+
 
 " Always hide the statusline
 set laststatus=2
