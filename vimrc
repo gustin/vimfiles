@@ -8,6 +8,8 @@ set backspace=indent,eol,start
 "store lots of :cmdline history
 set history=1000
 
+set number
+
 "return the syntax highlight group under the cursor ''
 function! StatuslineCurrentHighlight()
     let name = synIDattr(synID(line('.'),col('.'),1),'name')
