@@ -63,10 +63,6 @@ set wildmode=list:longest   "make cmdline tab completion similar to bash
 set wildmenu                "enable ctrl-n and ctrl-p to scroll thru matches
 set wildignore=*.o,*.obj,*~ "stuff to ignore when tab completing
 
-"display tabs and trailing spaces
-set list
-set listchars=tab:▷⋅,trail:⋅,nbsp:⋅
-
 set formatoptions-=o "dont continue comments when pushing o/O
 
 "vertical/horizontal scroll off settings
@@ -172,10 +168,12 @@ set grepformat=%f:%l:%m
 set hlsearch
 set incsearch " ...dynamically as they are typed.
 
-" auto-change directory to current buffer
-" autocmd BufEnter * :cd %:p:h
-
 let mapleader = ','
+
+" Shortcut to rapidly toggle `set list`
+nmap <leader>l :set list!<CR>                
+set list                                   " Show tabs, trailing spaces, eol
+set listchars=tab:▷⋅,trail:⋅,nbsp:⋅,eol:¬  " Change the symbols for tabs, etc
 
 map <leader>f :FuzzyFinderTextMate<CR>
 map <leader>, :NERDTreeToggle<CR>
