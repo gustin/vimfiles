@@ -1,14 +1,15 @@
-"Use Vim settings, rather then Vi settings (much better!).
-"This must be first, because it changes other options as a side effect.
+" Use Vim settings, rather then Vi settings (much better!).
+" This must be first, because it changes other options as a side effect.
 set nocompatible
 
-"allow backspacing over everything in insert mode
-set backspace=indent,eol,start
+set backspace=indent,eol,start   " Allow backspacing over everything in insert mode          
 
-"store lots of :cmdline history
-set history=1000
+set history=1000                 " Store lots of :cmdline history
 
-set number
+set title                        " Set the terminal's title
+set number                       " Turn on line numbering 
+
+set tags=./tags;                 " Set the tag file search order
 
 "return the syntax highlight group under the cursor ''
 function! StatuslineCurrentHighlight()
@@ -54,9 +55,9 @@ set autoindent
 set smarttab
 
 "folding settings
-set foldmethod=indent   "fold based on indent
-set foldnestmax=3       "deepest fold is 3 levels
-set nofoldenable        "dont fold by default
+set foldmethod=indent       "fold based on indent
+set foldnestmax=3           "deepest fold is 3 levels
+set nofoldenable            "dont fold by default
 
 set wildmode=list:longest   "make cmdline tab completion similar to bash
 set wildmenu                "enable ctrl-n and ctrl-p to scroll thru matches
@@ -77,25 +78,19 @@ set sidescroll=1
 filetype plugin on
 filetype indent on
 
-"turn on syntax highlighting
-syntax on
+syntax on                    "turn on syntax highlighting
 
 "some stuff to get the mouse going in term
 set mouse=a
 set ttymouse=xterm2
 
-"tell the term has 256 colors
-set t_Co=256
+set t_Co=256                 "tell the term has 256 colors
 
-"hide buffers when not displayed
-set hidden
+set hidden                   "hide buffers when not displayed
 
 "dont load csapprox if we no gui support - silences an annoying warning
 if !has("gui")
     let g:CSApprox_loaded = 1
-
-
-
 endif
 
 "make <c-l> clear the highlight as well as redraw
@@ -182,21 +177,29 @@ set incsearch " ...dynamically as they are typed.
 
 let mapleader = ','
 
-map <leader>cd :cd %:p:h<CR>  " change to current directory 
 map <leader>f :FuzzyFinderTextMate<CR>
 map <leader>, :NERDTreeToggle<CR>
 " Vim will show the ^M line-endings. A quick search and replace works wonders
 map <leader>m mz:%s/\r$//g<cr>`z
 
-map <leader>ew :e <C-R>=expand("%:p:h") . "/" <CR>
-map <leader>es :sp <C-R>=expand("%:p:h") . "/" <CR>
-map <leader>ev :vsp <C-R>=expand("%:p:h") . "/" <CR>
-map <leader>et :tabe <C-R>=expand("%:p:h") . "/" <CR>
+map <leader>ew :e <C-R>=expand("%:p:h") . '/' <CR>
+map <leader>es :sp <C-R>=expand("%:p:h") . '/' <CR>
+map <leader>ev :vsp <C-R>=expand("%:p:h") . '/' <CR>
+map <leader>et :tabe <C-R>=expand("%:p:h") . '/' <CR>
 
+" Tab mappings.
+map <leader>tt :tabnew<cr>
+map <leader>te :tabedit
+map <leader>tc :tabclose<cr>
+map <leader>to :tabonly<cr>
+map <leader>tn :tabnext<cr>
+map <leader>tp :tabprevious<cr>
+map <leader>tf :tabfirst<cr>
+map <leader>tl :tablast<cr>
+map <leader>tm :tabmove
 
-" Always hide the statusline
-set laststatus=2
+set laststatus=2                                     " Always hide the statusline
 
-" Format the statusline
-set statusline=Line:\ \ %l/%L:%c\ \ \ %F%m%r%h\ %w
+set statusline=Line:\ \ %l/%L:%c\ \ \ %F%m%r%h\ %w  " Format the statusline
 
+let g:bufExplorerShowRelativePath=1                 " Show relative paths for BufExplorer
