@@ -156,10 +156,6 @@ set directory=~/.vim-tmp,~/.tmp,~/tmp,/var/tmp,/tmp
 nnoremap <C-e> 3<C-e>
 nnoremap <C-y> 3<C-y>
 
-" Catch trailing whitespace ,s
-set listchars=tab:>-,trail:·,eol:$
-nmap <silent> <leader>s :set nolist!<CR>
-
 " ack
 set grepprg=ack
 set grepformat=%f:%l:%m
@@ -173,7 +169,7 @@ let mapleader = ','
 " Shortcut to rapidly toggle `set list`
 nmap <leader>l :set list!<CR>                
 set list                                   " Show tabs, trailing spaces, eol
-set listchars=tab:▷⋅,trail:⋅,nbsp:⋅,eol:¬  " Change the symbols for tabs, etc
+set listchars=tab:▸\ ,trail:⋅,nbsp:⋅,eol:¬  " Change the symbols for tabs, etc
 
 map <leader>f :FuzzyFinderTextMate<CR>
 map <leader>, :NERDTreeToggle<CR>
