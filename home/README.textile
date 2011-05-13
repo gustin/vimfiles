@@ -1,0 +1,9 @@
+h1. Usage
+
+In your home directory, run:
+<pre><code>
+git clone git://github.com/gustin/vimfiles.git .vim
+ln -s .vim/vimrc .vimrc
+
+</code></pre>
+
