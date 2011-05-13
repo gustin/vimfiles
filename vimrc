@@ -23,6 +23,8 @@ endfunction
 
 "recalculate the tab warning flag when idle and after writing
 autocmd cursorhold,bufwritepost * unlet! b:statusline_tab_warning
+" remove trainling whitespace
+autocmd BufWritePre * :%s/\s\+$//e
 
 " Quick, jump out of insert mode while no one is looking
 imap ii <Esc>
@@ -168,11 +170,12 @@ let mapleader = ','
 
 " Shortcut to rapidly toggle `set list`
 nmap <leader>l :set list!<CR>                
-set list                                   " Show tabs, trailing spaces, eol
+set list                                    " Show tabs, trailing spaces, eol
 set listchars=tab:▸\ ,trail:⋅,nbsp:⋅,eol:¬  " Change the symbols for tabs, etc
 
 map <leader>f :FuzzyFinderTextMate<CR>
 map <leader>, :NERDTreeToggle<CR>
+
 " Vim will show the ^M line-endings. A quick search and replace works wonders
 map <leader>m mz:%s/\r$//g<cr>`z
 
@@ -180,6 +183,10 @@ map <leader>ew :e <C-R>=expand("%:p:h") . '/' <CR>
 map <leader>es :sp <C-R>=expand("%:p:h") . '/' <CR>
 map <leader>ev :vsp <C-R>=expand("%:p:h") . '/' <CR>
 map <leader>et :tabe <C-R>=expand("%:p:h") . '/' <CR>
+
+" Autotest support
+compiler rubyunit
+nmap <Leader>at :cf /tmp/autotest.txt<CR> :compiler rubyunit<CR>
 
 " Tab mappings.
 map <leader>tt :tabnew<cr>
@@ -191,6 +198,12 @@ map <leader>tp :tabprevious<cr>
 map <leader>tf :tabfirst<cr>
 map <leader>tl :tablast<cr>
 map <leader>tm :tabmove
+
+" Simplify window navigation
+nmap <silent> <A-Up> :wincmd k<CR>
+nmap <silent> <A-Down> :wincmd j<CR>
+nmap <silent> <A-Left> :wincmd h<CR>
+nmap <silent> <A-Right> :wincmd l<CR>
 
 set laststatus=2                                     " Always hide the statusline
 
