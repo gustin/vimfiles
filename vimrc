@@ -2,14 +2,17 @@
 " This must be first, because it changes other options as a side effect.
 set nocompatible
 
-set backspace=indent,eol,start   " Allow backspacing over everything in insert mode          
-
+set backspace=indent,eol,start   " Allow backspacing over everything in insert mode
 set history=1000                 " Store lots of :cmdline history
-
 set title                        " Set the terminal's title
-set number                       " Turn on line numbering 
-
+set number                       " Turn on line numbering
 set tags=./tags;                 " Set the tag file search order
+set clipboard=unnamed
+syntax on                        " Enable highlighting for syntax
+set winwidth=79
+set switchbuf=useopen
+set numberwidth=5
+set shell=bash
 
 "return the syntax highlight group under the cursor ''
 function! StatuslineCurrentHighlight()
@@ -24,6 +27,7 @@ endfunction
 "recalculate the tab warning flag when idle and after writing
 autocmd cursorhold,bufwritepost * unlet! b:statusline_tab_warning
 " remove trainling whitespace
+" This removes uneeded spaces in slim
 autocmd BufWritePre * :%s/\s\+$//e
 
 " Quick, jump out of insert mode while no one is looking
@@ -72,6 +76,9 @@ set scrolloff=3
 set sidescrolloff=7
 set sidescroll=1
 
+"install pathogen.vim
+call pathogen#runtime_append_all_bundles()
+
 "load ftplugins and indent files
 filetype plugin on
 filetype indent on
@@ -114,7 +121,6 @@ endfunction
 vnoremap * :<C-u>call <SID>VSetSearch()<CR>//<CR>
 vnoremap # :<C-u>call <SID>VSetSearch()<CR>??<CR>
 
-
 "jump to last cursor position when opening a file
 "dont do it when writing a commit log entry
 autocmd BufReadPost * call SetCursorPosition()
@@ -143,9 +149,10 @@ endfunction
 set background=dark
 if has("gui_running")
   colorscheme ir_black
+  "colorscheme solarized
   set columns=101 lines=60
   set transparency=8
-endif
+end
 
 set guifont=Inconsolata:h18
 set guioptions=egmrLt
@@ -169,12 +176,15 @@ set incsearch " ...dynamically as they are typed.
 let mapleader = ','
 
 " Shortcut to rapidly toggle `set list`
-nmap <leader>l :set list!<CR>                
+nmap <leader>l :set list!<CR>
 set list                                    " Show tabs, trailing spaces, eol
 set listchars=tab:▸\ ,trail:⋅,nbsp:⋅,eol:¬  " Change the symbols for tabs, etc
 
 map <leader>f :FuzzyFinderTextMate<CR>
-map <leader>, :NERDTreeToggle<CR>
+
+" Clear the search buffer when hitting return
+:nnoremap <CR> :nohlsearch<cr>
+nnoremap <leader><leader> <c-^>
 
 " Vim will show the ^M line-endings. A quick search and replace works wonders
 map <leader>m mz:%s/\r$//g<cr>`z
@@ -188,7 +198,13 @@ map <leader>et :tabe <C-R>=expand("%:p:h") . '/' <CR>
 compiler rubyunit
 nmap <Leader>at :cf /tmp/autotest.txt<CR> :compiler rubyunit<CR>
 
+" Running single tests/specs/features
+map <leader>C :!cucumber % -r features/<CR>
+map <leader>S :!cucumber -p spork %<CR>
+map <leader>R :!rspec %<CR>
+
 " Tab mappings.
+map <leader>T :Tabularize/
 map <leader>tt :tabnew<cr>
 map <leader>te :tabedit
 map <leader>tc :tabclose<cr>
@@ -206,7 +222,55 @@ nmap <silent> <A-Left> :wincmd h<CR>
 nmap <silent> <A-Right> :wincmd l<CR>
 
 set laststatus=2                                     " Always hide the statusline
-
-set statusline=Line:\ \ %l/%L:%c\ \ \ %F%m%r%h\ %w  " Format the statusline
-
+set statusline=Line:\ \ %l/%L:%c\ \ \ %F%m%r%h\ %w   " Format the statusline
 let g:bufExplorerShowRelativePath=1                 " Show relative paths for BufExplorer
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" OPEN FILES IN DIRECTORY OF CURRENT FILE
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+cnoremap %% <C-R>=expand('%:h').'/'<cr>
+map <leader>e :edit %%
+map <leader>v :view %%
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" RENAME CURRENT FILE
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+function! RenameFile()
+    let old_name = expand('%')
+    let new_name = input('New file name: ', expand('%'), 'file')
+    if new_name != '' && new_name != old_name
+        exec ':saveas ' . new_name
+        exec ':silent !rm ' . old_name
+        redraw!
+    endif
+endfunction
+map <leader>n :call RenameFile()<cr>
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" CUSTOM AUTOCMDS
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+augroup vimrcEx
+  " Clear all autocmds in the group
+  autocmd!
+  autocmd FileType text setlocal textwidth=78
+  " Jump to last cursor position unless it's invalid or in an event handler
+  autocmd BufReadPost *
+    \ if line("'\"") > 0 && line("'\"") <= line("$") |
+    \   exe "normal g`\"" |
+    \ endif
+
+  "for ruby, autoindent with two spaces, always expand tabs
+  autocmd FileType ruby,haml,eruby,yaml,html,javascript,sass,cucumber set ai sw=2 sts=2 et
+
+  autocmd! BufRead,BufNewFile *.sass setfiletype sass
+
+  autocmd BufRead *.mkd  set ai formatoptions=tcroqn2 comments=n:&gt;
+  autocmd BufRead *.markdown  set ai formatoptions=tcroqn2 comments=n:&gt;
+
+  " Indent p tags
+  autocmd FileType html,eruby if g:html_indent_tags !~ '\\|p\>' | let g:html_indent_tags .= '\|p\|li\|dt\|dd' | endif
+
+  " Don't syntax highlight markdown because it's often wrong
+  autocmd! FileType mkd setlocal syn=off
+augroup END
+

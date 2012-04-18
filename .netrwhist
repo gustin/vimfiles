@@ -1,5 +1,5 @@
 let g:netrw_dirhistmax  =10
 let g:netrw_dirhist_cnt =3
-let g:netrw_dirhist_1='/Users/gustin/dev/heartwood'
-let g:netrw_dirhist_2='/Users/gustin/Sites/rails-3-1'
-let g:netrw_dirhist_3='/Users/gustin/Sites/plow-to-porch'
+let g:netrw_dirhist_1='/Users/gustin/.vim/bundle/command-t/ruby/command-t'
+let g:netrw_dirhist_2='/Users/gustin/.vim/bundle/command-t'
+let g:netrw_dirhist_3='/Users/gustin/Sites/thunderbolt/linea-web'
